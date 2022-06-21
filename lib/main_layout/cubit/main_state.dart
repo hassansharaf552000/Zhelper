@@ -40,6 +40,11 @@ class GetAllArticlesError extends MainState {
 
 
 class LogoutSuccess extends MainState {}
+class Change extends MainState {}
+class Change2 extends MainState {}
+
+
+class Change3 extends MainState {}
 
 
 

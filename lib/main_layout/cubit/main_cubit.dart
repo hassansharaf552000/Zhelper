@@ -22,6 +22,8 @@ part 'main_state.dart';
 class MainCubit extends Cubit<MainState> {
   MainCubit() : super(MainInitial());
 
+  var helperOneFormKey = GlobalKey<FormState>();
+
   static MainCubit get(context) => BlocProvider.of(context);
 
   List<Widget> screens = [
@@ -81,7 +83,6 @@ class MainCubit extends Cubit<MainState> {
     this.isMaleReq = value;
     emit(ChooseGenderState());
   }
-
 
   void requestHelp() {
     emit(ReuestHelperLoading());
@@ -143,13 +144,22 @@ class MainCubit extends Cubit<MainState> {
       "gender": isMaleHelper ? "male" : "female",
       "phone": helperphone.text
     }).then((value) {
-      if (value.statusCode == 200) {
-        emit(AddHelperSuccess(message: value.data["Message"]));
+
+      if(value.statusCode == 200)
+      {
+        emit(AddHelperSuccess(message: value.data['Message']));
       }
     }).catchError((error) {
+
       emit(AddHelperError(message: 'Error'));
-      print(error.toString());
     });
+  }
+
+  bool isAddHelperShow = true;
+
+  void hideHelperButton(){
+    isAddHelperShow = !isAddHelperShow;
+    emit(Change3());
   }
 
   /////////////////////// Home //////////////////////////////
@@ -176,5 +186,20 @@ class MainCubit extends Cubit<MainState> {
         .then((value) {
       emit(LogoutSuccess());
     });
+  }
+
+  String text = "متابعة";
+
+  void changeText() {
+    text = "تقديم";
+    print(text);
+    emit(Change());
+  }
+
+  String text2 = "متابعة";
+
+  void changeText2() {
+    text2 = "تقديم";
+    emit(Change2());
   }
 }

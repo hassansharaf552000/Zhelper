@@ -16,9 +16,10 @@ class DoneScreen extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
+          SizedBox(height: 100,),
           Image.asset(image,height: 200,width: 200,),
           SizedBox(height: 40,),
-          AppText(text:"تم إستلام طلبك بنجاح, و سيتم الرد عليك قريبا " , color: ColorsManger.darkPrimary,textSize: 25,maxLines: 2),
+          AppText(text:"تم إستلام طلبك بنجاح, و سيتم الرد عليك قريبا " , color: ColorsManger.darkPrimary,textSize: 25,maxLines: 2,align: TextAlign.center),
         ],
       ),
     );

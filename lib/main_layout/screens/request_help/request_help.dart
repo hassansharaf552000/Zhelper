@@ -12,9 +12,15 @@ import 'package:zhelper/ui/widgets/custom_button.dart';
 
 import '../../../shared/helper/mangers/colors.dart';
 
-class RequestHelp extends StatelessWidget {
+class RequestHelp extends StatefulWidget {
   const RequestHelp({Key? key}) : super(key: key);
 
+  @override
+  State<RequestHelp> createState() => _RequestHelpState();
+}
+
+class _RequestHelpState extends State<RequestHelp> {
+  String text = "التالي" ;
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -39,7 +45,7 @@ class RequestHelp extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     Container(
-                      height: SizeConfigManger.bodyHeight * .65,
+                      height: SizeConfigManger.bodyHeight * .8,
                       decoration: BoxDecoration(
                           border: Border.all(color: Colors.grey, width: 1),
                           borderRadius: BorderRadius.circular(20)),
@@ -57,8 +63,8 @@ class RequestHelp extends StatelessWidget {
                     SizedBox(
                       height: getProportionateScreenHeight(20),
                     ),
-                    CustomButton(
-                        text: "المتابعة",
+                   /* CustomButton(
+                        text: text,
                         press: () {
 
                           if (MainCubit.get(context).boardController2.page == 2.0)
@@ -73,9 +79,13 @@ class RequestHelp extends StatelessWidget {
 
                           }
                           else if(MainCubit.get(context).boardController2.page == 0.0){
-                            
                             int age = int.parse(MainCubit.get(context).patientAgeReq.text);
-                            if(age <18){
+
+                            if (MainCubit.get(context).patientNameReq.text.length < 4) {
+                              Toast.show("يجب ادخال 4 احرف او اكثر", context,
+                                  duration: 3, backgroundColor: Colors.red);
+                            }
+                            else if(age <18){
                               Toast.show("العمر يجب ان يكون اكبر من 18 سنة", context,backgroundColor: Colors.red,duration: 3);
                             }else{
                               MainCubit.get(context).boardController2.nextPage(
@@ -88,23 +98,33 @@ class RequestHelp extends StatelessWidget {
                           }
                           else {
                             if(MainCubit.get(context).boardController2.page == 1.0){
+
                               if(MainCubit.get(context).patientFamilyPhoneReq.text.length !=11){
                                 Toast.show("Phone Must be 11 number", context , duration: 3,backgroundColor: Colors.red);
                               }
                               else if(MainCubit.get(context).patientFamilySsnReq.text.length !=14){
                                 Toast.show("SSN Must be 14 number", context , duration: 3,backgroundColor: Colors.red);
                               }
+                              else if(MainCubit.get(context).patientFamilyNameReq.text.length <4){
+                                Toast.show("يجب ادخال 4 اخرف او اكثر", context , duration: 3,backgroundColor: Colors.red);
+                              }
                               else{
+
+
                                 MainCubit.get(context).boardController2.nextPage(
                                     duration: const Duration(
                                       milliseconds: 750,
                                     ),
-                                    curve: Curves.fastLinearToSlowEaseIn);
+                                    curve: Curves.fastLinearToSlowEaseIn).then((value) {
+                                      setState(() {
+                                        text="تقديم" ;
+                                      });
+                                });
 
                               }
                             }
                             }
-                        }),
+                        }),*/
                   ],
                 ),
               )

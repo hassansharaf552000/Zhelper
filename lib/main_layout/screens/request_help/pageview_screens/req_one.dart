@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tbib_toast/tbib_toast.dart';
 import 'package:zhelper/main_layout/cubit/main_cubit.dart';
 import 'package:zhelper/shared/helper/mangers/colors.dart';
 import 'package:zhelper/ui/widgets/app_text.dart';
 import 'package:zhelper/ui/widgets/custom_text_form_field.dart';
 import '../../../../shared/helper/mangers/size_config.dart';
+import '../../../../ui/widgets/custom_button.dart';
 import '../../../../ui/widgets/custom_choose_gender.dart';
 
 class RequestHelpOne extends StatelessWidget {
+  var formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<MainCubit, MainState>(
@@ -17,7 +21,7 @@ class RequestHelpOne extends StatelessWidget {
       builder: (context, state) {
         MainCubit cubit = MainCubit.get(context);
         return Form(
-
+          key: formKey,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
@@ -104,8 +108,34 @@ class RequestHelpOne extends StatelessWidget {
                         cubit.chooseGender(value!);
                       },
                     ),
+                    SizedBox(
+                      width: getProportionateScreenHeight(20.0),
+                    ),
+
                   ],
                 ),
+                SizedBox(
+                  height: getProportionateScreenHeight(40.0),
+                ),
+                CustomButton(
+                    text: "التالي",
+                    press: () {
+                      if(formKey.currentState!.validate()){
+                        int age = int.parse(MainCubit.get(context).patientAgeReq.text);
+                        if (MainCubit.get(context).patientNameReq.text.length < 4) {
+                          Toast.show("يجب ادخال 4 احرف او اكثر", context, duration: 3, backgroundColor: Colors.red);
+                        } else if (age < 18) {
+                          Toast.show("العمر يجب ان يكون اكبر من 18 سنة", context, backgroundColor: Colors.red, duration: 3);
+                        } else {
+                          MainCubit.get(context).boardController2.nextPage(
+                              duration: const Duration(
+                                milliseconds: 750,),
+                              curve: Curves.fastLinearToSlowEaseIn);
+                        }
+                      }
+
+                    }),
+
               ],
             ),
           ),

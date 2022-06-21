@@ -6,7 +6,9 @@ import 'package:zhelper/shared/helper/mangers/colors.dart';
 import 'package:zhelper/shared/helper/methods.dart';
 import 'package:zhelper/ui/widgets/app_text.dart';
 import 'package:zhelper/ui/widgets/custom_text_form_field.dart';
+import '../../../../shared/helper/icon_broken.dart';
 import '../../../../shared/helper/mangers/size_config.dart';
+import '../../../../ui/widgets/custom_button.dart';
 import '../../../../ui/widgets/custom_choose_gender.dart';
 
 class RequestHelpThree extends StatelessWidget {
@@ -14,23 +16,22 @@ class RequestHelpThree extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<MainCubit, MainState>(
       listener: (context, state) {
-        if(state is ReuestHelperLoading){
+        if (state is ReuestHelperLoading) {
           showCustomProgressIndicator(context);
-        }
-        else if(state is ReuestHelperSuccess){
+        } else if (state is ReuestHelperSuccess) {
           Navigator.pop(context);
-          Toast.show(state.message, context,duration: 3);
-          if(state.message == "Request Help Added"){
+          Toast.show(state.message, context, duration: 3);
+          if (state.message == "Request Help Added") {
             MainCubit.get(context).boardController2.nextPage(
                 duration: const Duration(
                   milliseconds: 750,
                 ),
                 curve: Curves.fastLinearToSlowEaseIn);
           }
-        }
-        else if(state is ReuestHelperError){
+        } else if (state is ReuestHelperError) {
           Navigator.pop(context);
-          Toast.show(state.message, context,duration: 3,backgroundColor: Colors.red);
+          Toast.show(state.message, context,
+              duration: 3, backgroundColor: Colors.red);
         }
       },
       builder: (context, state) {
@@ -46,6 +47,20 @@ class RequestHelpThree extends StatelessWidget {
                   ),
                   Row(
                     children: [
+                      IconButton(
+                          onPressed: () {
+                            MainCubit.get(context)
+                                .boardController2
+                                .previousPage(
+                                    duration: const Duration(
+                                      milliseconds: 750,
+                                    ),
+                                    curve: Curves.fastLinearToSlowEaseIn);
+                          },
+                          icon: Icon(IconBroken.Arrow___Right)),
+                      SizedBox(
+                        width: getProportionateScreenHeight(8),
+                      ),
                       Image.asset('assets/images/user.png'),
                       SizedBox(
                         width: getProportionateScreenHeight(8),
@@ -75,7 +90,7 @@ class RequestHelpThree extends StatelessWidget {
                     height: getProportionateScreenHeight(20),
                   ),
                   CustomTextFormField(
-                    controller:cubit.helperExpYearsReq,
+                    controller: cubit.helperExpYearsReq,
                     hintText: "سنوات الخبرة",
                     type: TextInputType.number,
                     validate: (String? value) {
@@ -154,6 +169,22 @@ class RequestHelpThree extends StatelessWidget {
                   SizedBox(
                     height: getProportionateScreenHeight(40),
                   ),
+                  CustomButton(
+                      text: "تقديم",
+                      press: () {
+                        if (MainCubit.get(context).boardController2.page ==
+                            2.0) {
+                          int age = int.parse(
+                              MainCubit.get(context).helperAgeReq.text);
+                          if (age >= 18) {
+                            MainCubit.get(context).requestHelp();
+                          } else {
+                            Toast.show(
+                                "العمر يجب ان يكون اكبر من 18", context,
+                                backgroundColor: Colors.red, duration: 3);
+                          }
+                        }
+                      }),
                 ],
               ),
             ),

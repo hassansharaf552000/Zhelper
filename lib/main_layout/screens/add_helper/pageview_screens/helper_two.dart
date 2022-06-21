@@ -6,10 +6,14 @@ import 'package:zhelper/shared/helper/mangers/colors.dart';
 import 'package:zhelper/shared/helper/methods.dart';
 import 'package:zhelper/ui/widgets/app_text.dart';
 import 'package:zhelper/ui/widgets/custom_text_form_field.dart';
+import '../../../../shared/helper/icon_broken.dart';
 import '../../../../shared/helper/mangers/size_config.dart';
+import '../../../../ui/widgets/custom_button.dart';
 import '../../../../ui/widgets/custom_choose_gender.dart';
 
 class HelperTwo extends StatelessWidget {
+  var formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<MainCubit, MainState>(
@@ -20,24 +24,27 @@ class HelperTwo extends StatelessWidget {
           Navigator.pop(context);
           Toast.show(state.message, context,
               duration: 3, backgroundColor: Colors.red);
-        }
-        else if (state is AddHelperSuccess) {
+        } else if (state is AddHelperSuccess) {
           Navigator.pop(context);
-          Toast.show(state.message, context, duration: 3,);
-          if(state.message=="Helper Added"){
+          Toast.show(
+            state.message,
+            context,
+            duration: 3,
+          );
+          if (state.message == "Helper Added") {
             MainCubit.get(context).boardController.nextPage(
                 duration: const Duration(
                   milliseconds: 750,
                 ),
                 curve: Curves.fastLinearToSlowEaseIn);
           }
-
         }
       },
       builder: (context, state) {
         MainCubit cubit = MainCubit.get(context);
         return SingleChildScrollView(
           child: Form(
+            key: formKey,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
@@ -47,6 +54,18 @@ class HelperTwo extends StatelessWidget {
                   ),
                   Row(
                     children: [
+                      IconButton(
+                          onPressed: () {
+                            MainCubit.get(context).boardController.previousPage(
+                                duration: const Duration(
+                                  milliseconds: 750,
+                                ),
+                                curve: Curves.fastLinearToSlowEaseIn);
+                          },
+                          icon: Icon(IconBroken.Arrow___Right)),
+                      SizedBox(
+                        width: getProportionateScreenHeight(8),
+                      ),
                       Image.asset('assets/images/user.png'),
                       SizedBox(
                         width: getProportionateScreenHeight(8),
@@ -56,7 +75,7 @@ class HelperTwo extends StatelessWidget {
                         color: ColorsManger.darkPrimary,
                         textSize: 24,
                         fontWeight: FontWeight.bold,
-                      )
+                      ),
                     ],
                   ),
                   SizedBox(
@@ -115,6 +134,14 @@ class HelperTwo extends StatelessWidget {
                   SizedBox(
                     height: getProportionateScreenHeight(40),
                   ),
+                  CustomButton(
+                      text: "تقديم",
+                      press: () {
+                        if (formKey.currentState!.validate()) {
+                          MainCubit cubit = MainCubit.get(context);
+                          cubit.addHelperToServer();
+                        }
+                      })
                 ],
               ),
             ),

@@ -28,17 +28,18 @@ class LoginScreen extends StatelessWidget {
           if (state is LoginLoadingState)
             showCustomProgressIndicator(context);
           else if (state is LoginSuccessLoginInState) {
-            Toast.show("Welcome", context,backgroundColor: Colors.green,duration: 3);
+            Toast.show("Welcome", context,
+                backgroundColor: Colors.green, duration: 3);
             Navigator.pop(context);
             navigateToAndFinish(context, MainLayout());
-          }
-          else if (state is LoginNotSuccessState) {
+          } else if (state is LoginNotSuccessState) {
             Navigator.pop(context);
-            Toast.show("${state.msg}", context,backgroundColor: Colors.red,duration: 3);
-          }
-          else if (state is LoginErrorState) {
+            Toast.show("${state.msg}", context,
+                backgroundColor: Colors.red, duration: 3);
+          } else if (state is LoginErrorState) {
             Navigator.pop(context);
-            Toast.show("Error", context,backgroundColor: Colors.red,duration: 3);
+            Toast.show("Error", context,
+                backgroundColor: Colors.red, duration: 3);
           }
         },
         builder: (context, state) {
@@ -68,10 +69,18 @@ class LoginScreen extends StatelessWidget {
                               child: CustomTextFormField(
                                   controller: emailController,
                                   lableText: 'الإيميل',
-                                  validate: (value) {
-                                    if (value.isEmpty) {
-                                      return 'البريد الإلكترونى مطلوب';
-                                    }
+                                  validate: (String? value) {
+                                    String pattern =
+                                        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+                                        r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+                                        r"{0,253}[a-zA-Z0-9])?)*$";
+                                    RegExp regex = RegExp(pattern);
+                                    if (value == null ||
+                                        value.isEmpty ||
+                                        !regex.hasMatch(value))
+                                      return 'Enter a valid email address';
+                                    else
+                                      return null;
                                   },
                                   type: TextInputType.emailAddress,
                                   prefixIcon: 'assets/icons/User.svg'),

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tbib_toast/tbib_toast.dart';
 import 'package:zhelper/main_layout/cubit/main_cubit.dart';
+import 'package:zhelper/shared/helper/icon_broken.dart';
 import 'package:zhelper/shared/helper/mangers/colors.dart';
 import 'package:zhelper/ui/widgets/app_text.dart';
 import 'package:zhelper/ui/widgets/custom_text_form_field.dart';
 import '../../../../shared/helper/mangers/size_config.dart';
+import '../../../../ui/widgets/custom_button.dart';
 import '../../../../ui/widgets/custom_choose_gender.dart';
 
 class HelperOne extends StatelessWidget {
@@ -18,6 +21,7 @@ class HelperOne extends StatelessWidget {
         MainCubit cubit = MainCubit.get(context);
         return SingleChildScrollView(
           child: Form(
+            key: cubit.helperOneFormKey,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
@@ -36,7 +40,7 @@ class HelperOne extends StatelessWidget {
                         color: ColorsManger.darkPrimary,
                         textSize: 24,
                         fontWeight: FontWeight.bold,
-                      )
+                      ),
                     ],
                   ),
                   SizedBox(
@@ -56,13 +60,21 @@ class HelperOne extends StatelessWidget {
                     height: getProportionateScreenHeight(20),
                   ),
                   CustomTextFormField(
-                    controller:cubit.helperMail,
+                    controller: cubit.helperMail,
                     hintText: "الإيميل",
                     type: TextInputType.emailAddress,
                     validate: (String? value) {
-                      if (value!.isEmpty) {
-                        return "يجب إدخال الإيميل";
-                      }
+                      String pattern =
+                          r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+                          r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+                          r"{0,253}[a-zA-Z0-9])?)*$";
+                      RegExp regex = RegExp(pattern);
+                      if (value == null ||
+                          value.isEmpty ||
+                          !regex.hasMatch(value))
+                        return 'Enter a valid email address';
+                      else
+                        return null;
                     },
                   ),
                   SizedBox(
@@ -122,6 +134,29 @@ class HelperOne extends StatelessWidget {
                   SizedBox(
                     height: getProportionateScreenHeight(40),
                   ),
+                  CustomButton(
+                      text: "التالي",
+                      press: () {
+                        MainCubit cubit = MainCubit.get(context);
+                        if (cubit.helperOneFormKey.currentState!.validate()) {
+                          if (cubit.helperName.text.length < 4) {
+                            Toast.show("يجب ادخال 4 احرف او اكثر", context,
+                                duration: 3, backgroundColor: Colors.red);
+                          } else if (cubit.helperphone.text.length != 11) {
+                            Toast.show("يرجي ادخال 11 رقم ", context,
+                                duration: 3, backgroundColor: Colors.red);
+                          } else if (cubit.helperssn.text.length != 14) {
+                            Toast.show("يرجي ادخال 14 رقم ", context,
+                                duration: 3, backgroundColor: Colors.red);
+                          } else {
+                            MainCubit.get(context).boardController.nextPage(
+                                duration: const Duration(
+                                  milliseconds: 750,
+                                ),
+                                curve: Curves.fastLinearToSlowEaseIn);
+                          }
+                        }
+                      })
                 ],
               ),
             ),
