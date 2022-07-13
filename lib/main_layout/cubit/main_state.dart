@@ -7,6 +7,7 @@ class MainInitial extends MainState {}
 class ChangeBottomNavState extends MainState {}
 class ChooseGenderState extends MainState {}
 class ChooseGenderHelperState extends MainState {}
+class SetUpUser extends MainState {}
 class PageViewState extends MainState {}
 
 class ReuestHelperLoading extends MainState {}

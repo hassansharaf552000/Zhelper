@@ -11,7 +11,8 @@ class LoginNotSuccessState extends LoginState {
 
   LoginNotSuccessState(this.msg);
 }
-class LoginSuccessLoginInState extends LoginState {}
+class LoginSuccessLoginInState extends LoginState {
+}
 class LoginErrorState extends LoginState {
   String errorMsg;
 

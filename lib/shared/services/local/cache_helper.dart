@@ -15,6 +15,10 @@ class CachedHelper {
     return _sharedPreferences!.getBool(key);
   }
 
+  static int? getInt({required String key}) {
+    return _sharedPreferences!.getInt(key);
+  }
+
   static Future<bool> saveData(
       {required String key, required dynamic value}) async {
     if (value is String) {

@@ -8,14 +8,14 @@ import 'package:zhelper/main_layout/screens/home/home.dart';
 import 'package:zhelper/main_layout/screens/message_screen/message_screen.dart';
 import 'package:zhelper/main_layout/screens/request_help/request_help.dart';
 import 'package:zhelper/main_layout/screens/settings/settings.dart';
-import 'package:zhelper/models/ArticModel.dart';
+import 'package:zhelper/models/user_model.dart';
 import 'package:zhelper/shared/helper/icon_broken.dart';
 import 'package:zhelper/shared/helper/mangers/constants.dart';
 import 'package:zhelper/shared/helper/mangers/end_point.dart';
 import 'package:zhelper/shared/services/local/cache_helper.dart';
 import 'package:zhelper/shared/services/network/dio_helper.dart';
+import '../../models/ArticlesModel.dart';
 import '../screens/add_helper/add_helper.dart';
-import 'package:http/http.dart' as http;
 
 part 'main_state.dart';
 
@@ -164,25 +164,56 @@ class MainCubit extends Cubit<MainState> {
 
   /////////////////////// Home //////////////////////////////
 
-  List<ArticlesModel> articlesList = [];
+  ArticlesModel ? articlesModel ;
+  List<Articles> defList = [];
+  List<Articles> dietList = [];
+  List<Articles> tipsList = [];
+  List<Articles> emerList = [];
+  List<Articles> medsList = [];
+  List<Articles> sportList = [];
 
   void getAllArticles() async {
     emit(GetAllArticlesLoading());
     DioHelper().getData(path: EndPoint.Articals).then((value) {
-      articlesList.add(ArticlesModel.fromJson(value.data));
-      articlesList.forEach((element) {
-        print(element.message);
-      });
+      defList.clear();
+      dietList.clear();
+      tipsList.clear();
+      medsList.clear();
+      sportList.clear();
+      emerList.clear();
+      articlesModel = ArticlesModel.fromJson(value.data);
+      articlesModel!.articles!.forEach((element) {
 
+          if(element.catagory == "Definition of alzheimer") {
+          defList.add(element);
+        }
+        else if(element.catagory == "Diet and healthy food"){
+          dietList.add(element);
+        }
+        else if(element.catagory == "Medicines and treatments"){
+          medsList.add(element);
+        }
+        else if(element.catagory == "Sports and activities"){
+          sportList.add(element);
+        }
+        else if(element.catagory == "Tip"){
+          print(element.catagory);
+          tipsList.add(element);
+        }  else if(element.catagory == "Emergencies"){
+          emerList.add(element);
+        }
+      });
       emit(GetAllArticlesSuccess());
     }).catchError((error) {
+      print(error.toString());
       emit(GetAllArticlesError(message: error.toString()));
     });
   }
 
+
   void logOut() async {
     CachedHelper.saveData(
-            key: ConstantsManger.TOKEN, value: ConstantsManger.DEFULT)
+            key: 'username', value: ConstantsManger.DEFULT)
         .then((value) {
       emit(LogoutSuccess());
     });

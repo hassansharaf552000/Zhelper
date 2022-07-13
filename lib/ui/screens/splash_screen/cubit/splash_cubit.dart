@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:zhelper/models/user_model.dart';
 
 import '../../../../shared/helper/mangers/constants.dart';
 import '../../../../shared/services/local/cache_helper.dart';
@@ -18,9 +19,13 @@ class SplashCubit extends Cubit<SplashState> {
       bool onBoarding =
           CachedHelper.getBooleon(key: ConstantsManger.ON_BOARDING) ?? false;
       if (onBoarding) {
-        String token = CachedHelper.getString(key: ConstantsManger.TOKEN)??ConstantsManger.DEFULT;
-        if (token != ConstantsManger.DEFULT) {
-          emit(SplashMainLayoutState());
+        String  username = CachedHelper.getString(key: 'username') ?? ConstantsManger.DEFULT;
+        String  email = CachedHelper.getString(key: 'email') ?? ConstantsManger.DEFULT;
+        int age  = CachedHelper.getInt(key: 'age') ?? 18;
+
+        UserModel userModel = UserModel(username: username, age: age, email: email);
+        if (username != ConstantsManger.DEFULT) {
+          emit(SplashMainLayoutState(userModel));
         } else {
           emit(SplashLoginState());
         }

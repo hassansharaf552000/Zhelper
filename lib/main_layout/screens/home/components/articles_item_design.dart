@@ -6,57 +6,50 @@ import 'package:zhelper/ui/widgets/app_text.dart';
 class ArticlesItemDesign extends StatelessWidget {
   dynamic press;
   final String image;
+  final String text;
 
-  ArticlesItemDesign({required this.press, required this.image});
+  ArticlesItemDesign({required this.press, required this.image , required this.text});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: getProportionateScreenWidth(20)),
-      child: GestureDetector(
-        onTap: press,
-        child: SizedBox(
-          width: getProportionateScreenWidth(242),
-          height: SizeConfigManger.bodyHeight * .15,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: Stack(
-              alignment: Alignment.bottomCenter,
-              children: [
-                Container(
-                  width: getProportionateScreenWidth(242),
-                  height: getProportionateScreenWidth(100),
-                  child: Image.asset(
-                    image,
-                    fit: BoxFit.cover,
+    return GestureDetector(
+      onTap: press,
+      child: Container(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              Container(
+                child: Image.asset(
+                  image,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Container(
+                height: getProportionateScreenWidth(40),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Color(0xFF343434).withOpacity(0.7),
+                      Color(0xFF343434).withOpacity(0.5),
+                    ],
                   ),
                 ),
-                Container(
-                  height: getProportionateScreenWidth(40),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Color(0xFF343434).withOpacity(0.4),
-                        Color(0xFF343434).withOpacity(0.15),
-                      ],
-                    ),
+              ),
+              Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: getProportionateScreenWidth(10),
                   ),
-                ),
-                Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: getProportionateScreenWidth(15.0),
-                      vertical: getProportionateScreenWidth(10),
-                    ),
-                    child: AppText(
-                      text: 'text',
-                      color: Colors.white,
-                      maxLines: 2,
-                      textSize: 22,
-                    )),
-              ],
-            ),
+                  child: AppText(
+                    text: '${text}',
+                    color: Colors.white,
+                    maxLines: 2,
+                    textSize: 16,
+                  )),
+            ],
           ),
         ),
       ),
